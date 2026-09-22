@@ -1,0 +1,63 @@
+@media (max-width: 1100px) {
+  .main-content { padding: 0 28px; }
+  .sidebar { width: 205px; flex-basis: 205px; }
+  .featured-film { grid-template-columns: 160px minmax(0, 1fr) 120px; gap: 22px; padding: 22px; }
+  .featured-poster { width: 160px; }
+  .featured-copy h2 { font-size: 28px; }
+  .featured-description { font-size: 13px; }
+}
+
+@media (max-width: 760px) {
+  .app-shell { display: block; }
+  .sidebar { width: 100%; height: auto; padding: 16px 18px; border-right: 0; border-bottom: 1px solid var(--line); }
+  .main-nav, .nav-section, .sidebar-bottom { display: none; }
+  .main-content { padding: 0 18px; }
+  .topbar { height: 60px; }
+  .hero-row { display: block; padding: 30px 0 25px; }
+  .hero-row .primary-button { margin-top: 22px; }
+  .featured-film { grid-template-columns: 112px minmax(0, 1fr); gap: 16px; padding: 16px; margin-bottom: 25px; }
+  .featured-poster { width: 112px; grid-row: span 2; }
+  .featured-poster span { font-size: 16px; }
+  .featured-copy h2 { margin-top: 8px; font-size: 22px; }
+  .featured-description { display: none; }
+  .featured-rating { grid-column: 2; padding: 0; border-left: 0; }
+  .featured-rating strong { display: inline; font-size: 25px; }
+  .featured-rating span { display: inline; margin: 0 0 0 7px; }
+  .featured-rating b { margin-top: 8px; }
+  .featured-rating small { display: none; }
+  .featured-actions { margin-top: 14px; gap: 12px; }
+  .featured-actions .primary-button { padding: 10px 12px; }
+  .stats-row { grid-template-columns: repeat(3, 1fr); }
+  .stat, .stat + .stat { min-width: 0; padding: 14px 8px 12px 0; }
+  .stat strong { font-size: 20px; }
+  .stat small { font-size: 8px; }
+  .toolbar { display: block; padding: 20px 0 16px; }
+  .tabs { overflow-x: auto; gap: 20px; padding-bottom: 15px; }
+  .tools { width: 100%; }
+  .search { flex: 1; min-width: 0; }
+  .tools select { max-width: 130px; }
+  .film-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 12px; }
+  footer { flex-wrap: wrap; gap: 10px 18px; }
+  footer span:nth-child(2) { margin-left: 0; }
+}
+
+@media (max-width: 460px) {
+  h1 { font-size: 38px; letter-spacing: -1.8px; }
+  .subhead { font-size: 12px; }
+  .featured-film { grid-template-columns: 94px minmax(0, 1fr); gap: 12px; }
+  .featured-poster { width: 94px; }
+  .featured-poster strong { top: 12px; left: 11px; font-size: 7px; }
+  .featured-poster i { right: 10px; bottom: 8px; }
+  .featured-copy h2 { font-size: 19px; }
+  .featured-meta { font-size: 8px; }
+  .quiet-button { font-size: 9px; }
+  .stat-label { font-size: 7px; }
+  .stat strong { font-size: 17px; }
+  .stat strong small { font-size: 9px; }
+  .stat small { line-height: 1.35; }
+  .view-button { display: none; }
+  .tools select { max-width: 112px; }
+  .film-meta h3 { font-size: 11px; }
+  .film-meta p { font-size: 8px; }
+  .film-foot { font-size: 8px; }
+}
