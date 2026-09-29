@@ -93,7 +93,10 @@ const server = createServer(async (request, response) => {
   response.setHeader('Cache-Control', 'no-store');
 
   try {
-    if (request.method === 'GET' && url.pathname === '/api/films') return sendJson(response, 200, films);
+    if (request.method === 'GET' && url.pathname === '/api/films') {
+      if (!getUser(request)) return sendJson(response, 401, { error: 'Not authenticated' });
+      return sendJson(response, 200, films);
+    }
 
     if (request.method === 'GET' && url.pathname === '/api/auth/me') {
       const user = getUser(request);
