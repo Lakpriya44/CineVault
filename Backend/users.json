@@ -1,0 +1,23 @@
+[
+  {
+    "id": "user-demo",
+    "email": "demo@cinevault.test",
+    "name": "Alex Jordan",
+    "passwordHash": "01b9fe3663c828ba9a2700e7581204635c173de19ec3ab2c4582eaf57becd0485437935dfd5ce241cc041e48a132b98f182f05b4988bdca1912915209e569047",
+    "passwordSalt": "cinevault-demo-salt"
+  },
+  {
+    "id": "user-49cd3f418b20b3849b9ced4a",
+    "email": "account20260929090221@example.test",
+    "name": "Test Viewer",
+    "passwordHash": "8f6455c26cdbdbafd7ce5f1c0bc0d922939bc1387ad3d1933375f28140cada3ce6d5efee062a9046299b06cc13183a18e1ba0e0d6f187aeeb6d5019ea382d2a3",
+    "passwordSalt": "7f0f92634451ec04689c74e8718e0fe0"
+  },
+  {
+    "id": "user-b2cdf3849581b448b8b13785",
+    "email": "sandunikaishani29@gmail.com",
+    "name": "alex",
+    "passwordHash": "611481ff29070aa9b4709bdaa71ee531f6fba7fd54284736f56782c548f5a129a7d362d3a1ca872174595a0cd05f3b9bbfeda92ac552a4ebc4348e21745ac216",
+    "passwordSalt": "1dac6828a49c552eeb5e0fe703e024f0"
+  }
+]

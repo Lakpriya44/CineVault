@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 import './login.css';
+import LoginPage from './LoginPage';
 
 const fallbackFilms = [
   { id: '1', title: 'The Long Goodbye', year: 1973, director: 'Robert Altman', genre: 'Noir', rating: '8.0', runtime: '112m', accent: '#c5a46d', poster: 'NOIR / 73', description: 'A private eye drifts through a sun-bleached Los Angeles that has forgotten how to be honest.' },
@@ -22,6 +23,9 @@ function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loginForm, setLoginForm] = useState({ email: '', password: '', remember: true });
+  const [loginError, setLoginError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     fetch('/api/films').then((response) => response.json()).then((data) => { if (Array.isArray(data) && data.length) setFilms(data); }).catch(() => undefined);
@@ -41,15 +45,36 @@ function App() {
   };
   const selectFilter = (nextFilter) => { setFilter(nextFilter); setQuery(''); };
 
-  const submitLogin = (event) => {
+  const submitLogin = async (event) => {
     event.preventDefault();
-    if (!loginForm.email || !loginForm.password) {
+    if (isSubmitting) return;
+    setLoginError('');
+    if (!loginForm.email.trim() || !loginForm.password) {
       notify('Enter your email and password');
       return;
     }
-    setShowLogin(false);
-    notify('Welcome back to CineVault');
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ ...loginForm, email: loginForm.email.trim() })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Unable to sign in');
+      setUser(data.user);
+      setShowLogin(false);
+      notify(`Welcome back, ${data.user.name}`);
+    } catch (error) {
+      setLoginError(error.message || 'Unable to sign in. Try again.');
+      notify(error.message || 'Unable to sign in. Try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (showLogin) return <LoginPage onSuccess={(nextUser) => { setUser(nextUser); setShowLogin(false); }} onBack={() => setShowLogin(false)} notify={notify} />;
 
   if (showLogin) return <div className="login-page">
     <div className="login-art"><div className="login-art-copy"><span className="eyebrow">A home for cinema</span><h1>Every film<br /><em>has a story.</em></h1><p>Keep the ones that become part of yours.</p></div><div className="film-strip"><span>NOIR</span><span>ROMANCE</span><span>DRAMA</span></div></div>
@@ -65,11 +90,11 @@ function App() {
         <button className={`nav-item ${filter === 'My shelf' ? 'active' : ''}`} onClick={() => setFilter('My shelf')}><span>☆</span> My shelf <b>{saved.length || 12}</b></button>
       </nav>
       <div className="nav-section"><span>COLLECTIONS</span><button className="nav-item"><i className="dot amber" /> Essential cinema <b>86</b></button><button className="nav-item"><i className="dot teal" /> New wave <b>42</b></button><button className="nav-item"><i className="dot coral" /> Comfort rewatches <b>18</b></button></div>
-      <div className="sidebar-bottom"><button className="profile"><span className="avatar">AJ</span><span><strong>Alex Jordan</strong><small>Film enthusiast</small></span><span className="chevron">⌄</span></button></div>
+      <div className="sidebar-bottom"><button className="profile"><span className="avatar">{user?.name?.slice(0, 2).toUpperCase() || 'AJ'}</span><span><strong>{user?.name || 'Alex Jordan'}</strong><small>Film enthusiast</small></span><span className="chevron">⌄</span></button></div>
     </aside>
 
     <main className="main-content">
-      <header className="topbar"><div className="breadcrumbs"><span>Explore</span><b>/</b> Film archive</div><div className="top-actions"><button className="icon-button" aria-label="Notifications">♧<em /></button><button className="avatar mini" onClick={() => setShowLogin(true)} aria-label="Open account">AJ</button></div></header>
+      <header className="topbar"><div className="breadcrumbs"><span>Explore</span><b>/</b> Film archive</div><div className="top-actions"><button className="icon-button" aria-label="Notifications">♧<em /></button><button className="avatar mini login-icon" onClick={() => setShowLogin(true)} aria-label="Sign in">👤</button></div></header>
       <section className="hero-row"><div><p className="eyebrow">A personal cinema journal <span>•</span> 21 September 2026</p><h1>Films worth <em>remembering.</em></h1><p className="subhead">Discover, review, and keep the stories that stay with you.</p></div><button className="primary-button" onClick={() => notify('Review composer opened')}><span>＋</span> Write a review</button></section>
       <section className="featured-film"><div className="featured-poster poster"><span>NOIR<br />/ 73</span><strong>FEATURED</strong><i>✦</i></div><div className="featured-copy"><span className="eyebrow">EDITOR'S PICK · 01</span><h2>The Long Goodbye</h2><p className="featured-meta">Robert Altman <span>•</span> 1973 <span>•</span> Noir <span>•</span> 112m</p><p className="featured-description">A private eye drifts through a sun-bleached Los Angeles that has forgotten how to be honest. A beautifully loose, melancholy mystery with a pulse all its own.</p><div className="featured-actions"><button className="primary-button" onClick={() => setSelected(films[0])}>View film <span>→</span></button><button className="quiet-button" onClick={() => saveFilm(films[0])}>☆ Add to shelf</button></div></div><div className="featured-rating"><strong>8.0</strong><span>IMDb rating</span><b>★★★★<i>★</i></b><small>2,418 community reviews</small></div></section>
       <section className="stats-row" aria-label="Archive statistics"><div className="stat"><span className="stat-label">IN YOUR ARCHIVE</span><strong>248</strong><small><i className="up">↗</i> 12 added this month</small></div><div className="stat"><span className="stat-label">REVIEWS WRITTEN</span><strong>37</strong><small><i className="up">↗</i> 8 this year</small></div><div className="stat"><span className="stat-label">YOUR AVG. RATING</span><strong>7.8 <small>/ 10</small></strong><small><i className="neutral">●</i> Taste is evolving</small></div></section>
