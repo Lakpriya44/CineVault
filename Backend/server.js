@@ -1,9 +1,11 @@
+import connectDB from './config/database.js';
+import User from './models/User.js';
 import { createServer } from 'node:http';
 import { randomBytes, scryptSync, timingSafeEqual, createHmac } from 'node:crypto';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 
 const port = Number(process.env.PORT || 3001);
-const sessionSecret = process.env.SESSION_SECRET || 'cinevault-development-secret';
+const sessionSecret = process.env.SESSION_SECRET || 'cinevault-development-secret'; 
 const sessionDuration = 1000 * 60 * 60 * 24 * 7;
 
 const films = [
@@ -105,27 +107,50 @@ const server = createServer(async (request, response) => {
 
     if (request.method === 'POST' && url.pathname === '/api/auth/register') {
       const body = await readBody(request);
+
       const name = String(body.name || '').trim();
       const email = String(body.email || '').trim().toLowerCase();
       const password = String(body.password || '');
+
       if (name.length < 2 || !email.includes('@') || password.length < 8) {
-        return sendJson(response, 400, { error: 'Use a name, valid email, and password with at least 8 characters' });
+        return sendJson(response, 400, {
+          error: 'Use a name, valid email, and password with at least 8 characters'
+        });
       }
-      if (users.has(email)) return sendJson(response, 409, { error: 'An account with that email already exists' });
+
+      const existingUser = await User.findOne({ email });
+
+      if (existingUser) {
+        return sendJson(response, 409, {
+          error: 'An account with that email already exists'
+        });
+      }
+
       const passwordSalt = randomBytes(16).toString('hex');
-      const user = {
+
+      const user = await User.create({
         id: `user-${randomBytes(12).toString('hex')}`,
         email,
         name,
         passwordHash: scryptSync(password, passwordSalt, 64).toString('hex'),
         passwordSalt
-      };
-      users.set(email, user);
-      saveUsers();
+      });
+
       const token = createSession(user.id, Boolean(body.remember));
-      const maxAge = body.remember ? `; Max-Age=${sessionDuration / 1000}` : '';
-      return sendJson(response, 201, { user: publicUser(user) }, { 'Set-Cookie': `cinevault_session=${encodeURIComponent(token)}; HttpOnly; Path=/; SameSite=Lax${maxAge}` });
-    }
+
+      const maxAge = body.remember
+        ? `; Max-Age=${sessionDuration / 1000}`
+        : '';
+
+      return sendJson(
+        response,
+        201,
+        { user: publicUser(user) },
+        {
+          'Set-Cookie': `cinevault_session=${encodeURIComponent(token)}; HttpOnly; Path=/; SameSite=Lax${maxAge}`
+        }
+      );
+}
 
     if (request.method === 'POST' && url.pathname === '/api/auth/login') {
       const body = await readBody(request);
@@ -153,7 +178,9 @@ const server = createServer(async (request, response) => {
   }
 });
 
-server.listen(port, '127.0.0.1', () => {
-  console.log(`CineVault API running at http://127.0.0.1:${port}`);
-  console.log('Development login: demo@cinevault.test / cinevault');
+connectDB().then(() => {
+  server.listen(port, '127.0.0.1', () => {
+    console.log(`CineVault API running at http://127.0.0.1:${port}`);
+    console.log('Development login: demo@cinevault.test / cinevault');
+  });
 });
