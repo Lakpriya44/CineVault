@@ -1,0 +1,72 @@
+/* Design tokens: one place to change the look of the whole app. */
+:root {
+  --ink: #0e1016;
+  --smoke: rgba(15, 17, 24, 0.76);
+  --silver: #e7e9ee;
+  --mist: #a3abbd;
+  --line: rgba(231, 233, 238, 0.18);
+  --field: rgba(255, 255, 255, 0.07);
+  --curtain: #c8324b;
+  --curtain-hover: #d9465f;
+  --beam: #f5d9a8;
+  --danger: #ff9aa8;
+  --ok: #9be3b4;
+
+  --font-display: 'Big Shoulders Display', Impact, 'Arial Narrow', sans-serif;
+  --font-body: 'Instrument Sans Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--silver);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--beam);
+  text-underline-offset: 3px;
+}
+
+/* Keyboard focus is always visible. */
+:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+button {
+  font: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

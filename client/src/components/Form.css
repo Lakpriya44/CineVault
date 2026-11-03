@@ -1,0 +1,140 @@
+.form {
+  display: grid;
+  gap: 18px;
+}
+
+.form__title {
+  font-size: 1.5rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field__label {
+  font-size: 0.875rem;
+  font-weight: 550;
+}
+
+.field__row {
+  position: relative;
+}
+
+.field__input {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--field);
+  color: var(--silver);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font: inherit;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.field__input::placeholder {
+  color: var(--mist);
+  opacity: 0.7;
+}
+
+.field__input:hover {
+  border-color: rgba(231, 233, 238, 0.35);
+}
+
+.field__input:focus-visible {
+  border-color: var(--beam);
+  outline-offset: 0;
+}
+
+.field__input[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+
+/* Leave room for the Show/Hide button. */
+.field__row:has(.field__toggle) .field__input {
+  padding-right: 68px;
+}
+
+.field__toggle {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  padding: 6px 10px;
+  background: none;
+  border: 0;
+  border-radius: 6px;
+  color: var(--mist);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.field__toggle:hover {
+  color: var(--silver);
+}
+
+.field__message {
+  font-size: 0.8125rem;
+  color: var(--mist);
+}
+
+.field__message--error {
+  color: var(--danger);
+}
+
+.notice {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border-left: 3px solid;
+  font-size: 0.9375rem;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.notice--error {
+  border-color: var(--danger);
+}
+
+.notice--ok {
+  border-color: var(--ok);
+}
+
+.button {
+  width: 100%;
+  padding: 13px 16px;
+  background: var(--curtain);
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.button:hover:not(:disabled) {
+  background: var(--curtain-hover);
+}
+
+.button:disabled {
+  opacity: 0.65;
+  cursor: progress;
+}
+
+.button--quiet {
+  width: auto;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--silver);
+}
+
+.button--quiet:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.form__switch {
+  text-align: center;
+  color: var(--mist);
+  font-size: 0.9375rem;
+}

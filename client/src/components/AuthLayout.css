@@ -1,0 +1,90 @@
+.auth {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+}
+
+/* The login window is styled as a cinema ticket: a stub with the brand,
+   a perforated tear line, then the form below. */
+.ticket {
+  --stub-height: 128px;
+  --notch: 14px;
+
+  position: relative;
+  width: min(440px, 100%);
+  background: var(--smoke);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  backdrop-filter: blur(18px) saturate(1.15);
+  border-radius: 20px;
+  animation: ticket-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.25s both;
+
+  /* Semicircle notches cut into both sides at the tear line. */
+  -webkit-mask:
+    radial-gradient(circle var(--notch) at 0 var(--stub-height), transparent calc(var(--notch) - 1px), #000 var(--notch)) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% var(--stub-height), transparent calc(var(--notch) - 1px), #000 var(--notch)) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle var(--notch) at 0 var(--stub-height), transparent calc(var(--notch) - 1px), #000 var(--notch)) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% var(--stub-height), transparent calc(var(--notch) - 1px), #000 var(--notch)) right / 51% 100% no-repeat;
+}
+
+.ticket__stub {
+  height: var(--stub-height);
+  padding: 0 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  border-radius: 20px 20px 0 0;
+  background: rgba(200, 50, 75, 0.16);
+}
+
+.ticket__brand {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 3rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ticket__tagline {
+  color: var(--mist);
+  font-size: 0.9375rem;
+}
+
+.ticket__perforation {
+  position: absolute;
+  top: var(--stub-height);
+  left: calc(var(--notch) + 10px);
+  right: calc(var(--notch) + 10px);
+  border-top: 2px dashed var(--line);
+}
+
+.ticket__body {
+  padding: 32px;
+}
+
+@keyframes ticket-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .ticket__stub,
+  .ticket__body {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .ticket__brand {
+    font-size: 2.5rem;
+  }
+}
